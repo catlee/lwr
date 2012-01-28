@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.8.1: http://docutils.sourceforge.net/" />
+<title>Large Wooden Rabbit Architecture</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="large-wooden-rabbit-architecture">
+<h1 class="title">Large Wooden Rabbit Architecture</h1>
+
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id1">Overview</a><ul>
+<li><a class="reference internal" href="#goals" id="id2">Goals</a></li>
+<li><a class="reference internal" href="#anti-goals" id="id3">Anti-Goals</a></li>
+<li><a class="reference internal" href="#why-not-x" id="id4">Why not X?</a><ul>
+<li><a class="reference internal" href="#buildbot" id="id5">Buildbot</a></li>
+<li><a class="reference internal" href="#jenkins-hudson" id="id6">Jenkins/Hudson</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#components" id="id7">Components</a><ul>
+<li><a class="reference internal" href="#planner" id="id8">Planner</a><ul>
+<li><a class="reference internal" href="#planner-job-queue" id="id9">Planner -&gt; Job Queue</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#job-queue" id="id10">Job Queue</a><ul>
+<li><a class="reference internal" href="#job-queue-slave-wrangler" id="id11">Job Queue -&gt; Slave Wrangler</a></li>
+<li><a class="reference internal" href="#job-queue-status" id="id12">Job Queue -&gt; Status</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slave-wrangler" id="id13">Slave Wrangler</a><ul>
+<li><a class="reference internal" href="#slave-wrangler-slave" id="id14">Slave Wrangler -&gt; Slave</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slave" id="id15">Slave</a><ul>
+<li><a class="reference internal" href="#slave-job-queue" id="id16">Slave -&gt; Job Queue</a></li>
+<li><a class="reference internal" href="#slave-files" id="id17">Slave -&gt; Files</a></li>
+<li><a class="reference internal" href="#slave-status" id="id18">Slave -&gt; Status</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#status" id="id19">Status</a><ul>
+<li><a class="reference internal" href="#http-api" id="id20">HTTP API</a></li>
+<li><a class="reference internal" href="#status-slave" id="id21">Status -&gt; Slave</a></li>
+<li><a class="reference internal" href="#status-events" id="id22">Status -&gt; Events</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#events" id="id23">Events</a><ul>
+<li><a class="reference internal" href="#events-planner" id="id24">Events -&gt; Planner</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#files" id="id25">Files</a><ul>
+<li><a class="reference internal" href="#files-slave" id="id26">Files -&gt; Slave</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#objects" id="id27">Objects</a><ul>
+<li><a class="reference internal" href="#scheduler" id="id28">Scheduler</a></li>
+<li><a class="reference internal" href="#job-set" id="id29">Job Set</a></li>
+<li><a class="reference internal" href="#job" id="id30">Job</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#access-control" id="id31">Access control</a></li>
+<li><a class="reference internal" href="#todo" id="id32">TODO</a></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h1><a class="toc-backref" href="#id1">Overview</a></h1>
+<p>Large Wooden Rabbit is the code name for the next generation of Release
+Engineering's build infrastructure.</p>
+<div class="section" id="goals">
+<h2><a class="toc-backref" href="#id2">Goals</a></h2>
+<p>LWR will:</p>
+<ul class="simple">
+<li>allow you to simply rebuild failed tasks, or hierarchies of tasks. These
+rebuilt tasks can satisfy previous dependency graphs.</li>
+<li>allow you to specify DAGs for job dependencies</li>
+<li>be able to change scheduling at run time via a web interface or API. some
+examples:<ul>
+<li>enable a new branch</li>
+<li>change tests running on a branch</li>
+<li>clone an existing branch config and modify it to report to an alternate
+location. This can be used to test out changes to the scheduling
+process.</li>
+</ul>
+</li>
+<li>operate at scale. This means:<ul>
+<li>support multiple distributed clusters of slaves and 'masters'</li>
+<li>support 10<sup>5</sup> slaves</li>
+<li>support 10<sup>5</sup> pending jobs</li>
+</ul>
+</li>
+<li>Allow community members or other developer hosted projects to participate
+more easily<ul>
+<li>allow results to be submitted to be associated with e.g.
+mozilla-central changesets. For example, somebody should be able to
+build a static analysis test on his own machine, and have those results
+available in the same place as the official build and test results,
+associated with the revision of mozilla-central he did the tests from.</li>
+<li>allow external community systems to connect and get jobs from LWR. This
+could be through direct connections, or a pubsub system.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="anti-goals">
+<h2><a class="toc-backref" href="#id3">Anti-Goals</a></h2>
+<p>LWR will not:</p>
+<ul class="simple">
+<li>gain you access to fortified french castles</li>
+</ul>
+</div>
+<div class="section" id="why-not-x">
+<h2><a class="toc-backref" href="#id4">Why not X?</a></h2>
+<div class="section" id="buildbot">
+<h3><a class="toc-backref" href="#id5">Buildbot</a></h3>
+<p>Buildbot has served us well, but has a few fundamental limitations that
+are very difficult to change or work around:</p>
+<ul class="simple">
+<li>require constant connection between build master and slave. This puts a
+high load on network infrastructure which causes burnt builds/tests due
+to dropped connections, and makes it hard to do maintenance on masters.
+Having build slave &lt;-&gt; master(s) communication be resilient to failure or
+being able to have slaves fall over to another master would be a great
+improvement to system stability.</li>
+<li>scheduling is opaque and difficult to change at run-time. buildbot
+doesn't provide much in the way of interfaces to the schedulers.
+Sometimes they log things to the master log files, most of the time
+they don't. Debugging misbehaving schedulers is a bit of a black art.
+Execution of one scheduler can block execution of other schedulers.
+It's also difficult to alter the set of jobs that happen as part of a
+build or test run at runtime. reconfigs don't cut it.</li>
+<li>poor support for non-trivial hierarchies of jobs. If you have a process
+with many fanout and collection points, it's very difficult to
+represent this in buildbot. It's even harder to know reliably when
+everything in the process is done.</li>
+<li>no single source of truth for build status. We've been maintaining our
+own mysql database to store build status, but it's not directly
+associated with the schedulerdb. Providing a consistent view of these
+databases is complicated; exports to other applications is expensive and
+complex.</li>
+</ul>
+</div>
+<div class="section" id="jenkins-hudson">
+<h3><a class="toc-backref" href="#id6">Jenkins/Hudson</a></h3>
+<p>Jenkins seems well suited to simple processes, but for handling a large set
+of complex tasks.</p>
+<p>I really don't know it well enough to evaluate though. It's written in java
+though :\</p>
+</div>
+</div>
+</div>
+<div class="section" id="components">
+<h1><a class="toc-backref" href="#id7">Components</a></h1>
+<img alt="arch.png" src="arch.png" />
+<div class="section" id="planner">
+<h2><a class="toc-backref" href="#id8">Planner</a></h2>
+<p>The planner is responsible for responding to events and creating new jobs.
+<a class="reference internal" href="#scheduler">Scheduler</a> definitions live in the planner. When an event is received that a
+scheduler is subscribed to, the planner will create a job to run that
+scheduler.</p>
+<div class="section" id="planner-job-queue">
+<h3><a class="reference internal" href="#planner">Planner</a> -&gt; <a class="reference internal" href="#job-queue">Job Queue</a></h3>
+<p>The <a class="reference internal" href="#planner">planner</a> has a one-way communication with the <a class="reference internal" href="#job-queue">job queue</a>, it simply
+notifies the <a class="reference internal" href="#job-queue">job queue</a> of new jobs to run.</p>
+<ul class="simple">
+<li>New job</li>
+</ul>
+</div>
+</div>
+<div class="section" id="job-queue">
+<h2><a class="toc-backref" href="#id10">Job Queue</a></h2>
+<p>The <a class="reference internal" href="#job-queue">job queue</a> is responsible for tracking new jobs, sending them for
+execution to the <a class="reference internal" href="#slave-wrangler">slave wrangler</a> if required, or queuing them up for later
+processing.</p>
+<p>All modifications to jobs are done through this component. This includes
+cancelling or pausing jobs.</p>
+<div class="section" id="job-queue-slave-wrangler">
+<h3><a class="reference internal" href="#job-queue">Job Queue</a> -&gt; <a class="reference internal" href="#slave-wrangler">Slave Wrangler</a></h3>
+<ul class="simple">
+<li>Run job A on slave X</li>
+</ul>
+</div>
+<div class="section" id="job-queue-status">
+<h3><a class="reference internal" href="#job-queue">Job Queue</a> -&gt; <a class="reference internal" href="#status">Status</a></h3>
+<ul class="simple">
+<li>Job A is new, running, pending, etc.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="slave-wrangler">
+<h2><a class="toc-backref" href="#id13">Slave Wrangler</a></h2>
+<p>Receives jobs from the <a class="reference internal" href="#job-queue">job queue</a> and runs them on slaves.</p>
+<p>Mostly just a broker to talk to slaves.</p>
+<div class="section" id="slave-wrangler-slave">
+<h3><a class="reference internal" href="#slave-wrangler">Slave Wrangler</a> -&gt; <a class="reference internal" href="#slave">Slave</a></h3>
+<ul class="simple">
+<li>Run job A</li>
+</ul>
+</div>
+</div>
+<div class="section" id="slave">
+<h2><a class="toc-backref" href="#id15">Slave</a></h2>
+<p>Slaves do work!</p>
+<div class="section" id="slave-job-queue">
+<h3><a class="reference internal" href="#slave">Slave</a> -&gt; <a class="reference internal" href="#job-queue">Job Queue</a></h3>
+<ul class="simple">
+<li>Create new job</li>
+<li>Send trigger</li>
+<li>Delete jobs (e.g. a scheduler job could cancel other pending work)</li>
+<li>Merge jobs (e.g. a scheduler job could merge pending work together)</li>
+</ul>
+</div>
+<div class="section" id="slave-files">
+<h3><a class="reference internal" href="#slave">Slave</a> -&gt; <a class="reference internal" href="#files">Files</a></h3>
+<ul class="simple">
+<li>Upload files and logs, store urls</li>
+<li>See also <a class="reference internal" href="#files-slave">Files -&gt; Slave</a></li>
+</ul>
+</div>
+<div class="section" id="slave-status">
+<h3><a class="reference internal" href="#slave">Slave</a> -&gt; <a class="reference internal" href="#status">Status</a></h3>
+<p>Notification of job status: started, finished, including meta data like:</p>
+<ul class="simple">
+<li>build started/finished</li>
+<li>start/stop time</li>
+<li>per-step start/stop time</li>
+<li>results (success, failure, etc.)</li>
+<li>rich results (??? e.g. multi l10n repacks)</li>
+<li>urls to logs, files</li>
+<li>See also <a class="reference internal" href="#status-slave">Status -&gt; Slave</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="status">
+<h2><a class="toc-backref" href="#id19">Status</a></h2>
+<p>Get and retrieve status on individual jobs and job sets.</p>
+<div class="section" id="http-api">
+<h3><a class="toc-backref" href="#id20">HTTP API</a></h3>
+<dl class="docutils">
+<dt>GET /status/jobs/&lt;jobid&gt;</dt>
+<dd>get status about job $jobid</dd>
+<dt>GET /status/jobsets/&lt;jobsetid&gt;</dt>
+<dd>get status about $jobsetid</dd>
+<dt>GET /status/bytags/&lt;tags&gt;</dt>
+<dd>get status about jobs associated with $tags</dd>
+<dt>POST /status/jobs</dt>
+<dd>create new job</dd>
+<dt>POST /status/jobsets</dt>
+<dd>create new jobset</dd>
+<dt>PUT /status/jobs/&lt;jobid&gt;</dt>
+<dd>update job</dd>
+<dt>PUT /status/jobsets/&lt;jobsetid&gt;</dt>
+<dd>update job set</dd>
+</dl>
+</div>
+<div class="section" id="status-slave">
+<h3><a class="reference internal" href="#status">Status</a> -&gt; <a class="reference internal" href="#slave">Slave</a></h3>
+<ul class="simple">
+<li>fetch status of old jobs (e.g. a scheduler job might want to know state of other jobs)</li>
+</ul>
+</div>
+<div class="section" id="status-events">
+<h3><a class="reference internal" href="#status">Status</a> -&gt; <a class="reference internal" href="#events">Events</a></h3>
+<ul class="simple">
+<li>job finished</li>
+<li>job added</li>
+</ul>
+</div>
+</div>
+<div class="section" id="events">
+<h2><a class="toc-backref" href="#id23">Events</a></h2>
+<div class="section" id="events-planner">
+<h3><a class="reference internal" href="#events">Events</a> -&gt; <a class="reference internal" href="#planner">Planner</a></h3>
+<ul class="simple">
+<li>new pushes to hg / git / cvs / etc.</li>
+<li>triggers</li>
+<li>builds starting / builds stopping</li>
+</ul>
+</div>
+</div>
+<div class="section" id="files">
+<h2><a class="toc-backref" href="#id25">Files</a></h2>
+<p>Files and logs go here.</p>
+<p>The APIs for this should be pretty simple. You need to be able to upload a file and get back a URL. The existing scp / post_upload.py would suffice.</p>
+<div class="section" id="files-slave">
+<h3><a class="reference internal" href="#files">Files</a> -&gt; <a class="reference internal" href="#slave">Slave</a></h3>
+<ul class="simple">
+<li>Download files</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="objects">
+<h1><a class="toc-backref" href="#id27">Objects</a></h1>
+<div class="section" id="scheduler">
+<h2><a class="toc-backref" href="#id28">Scheduler</a></h2>
+<p>A scheduler is basically a job template with a list of event subscriptions.
+The job template will be instantiated when a matching event is received by
+the planner. The event will be attached to the job and then sent to the
+<a class="reference internal" href="#job-queue">job queue</a>.</p>
+<p>Schedulers are managed and triggered by the <a class="reference internal" href="#planner">planner</a>.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li>A &quot;jobset&quot; scheduler subscribes to &quot;build.finish&quot;, &quot;build.trigger&quot; events
+and creates a job that determines if any new jobs in a jobset are
+runnable.</li>
+<li>A &quot;mozilla&quot; scheduler subscribes to hg push events and creates a full
+hierarchy of builds and tests (a <a class="reference internal" href="#job-set">job set</a>) with proper dependencies
+between them.</li>
+</ul>
+</div>
+<div class="section" id="job-set">
+<h2><a class="toc-backref" href="#id29">Job Set</a></h2>
+<p>A job set is a <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a> that describes a hierarchy of jobs
+to run and how they're related. An example would be the set of builds
+created for an hg push, and the tests for that build. The tests depend on
+the builds to succeed. By creating everything under a single jobset you can
+know when everything is completed or not, and have a place to look up all
+the results associated with a single push.</p>
+<p>Another example would be our release automation. We have a fairly complex
+set of dependencies between tagging / builds / repacks / updates (en-US
+builds depend on en-US tagging, repacks depend on locale tagging and en-US
+builds, updates depend on builds, partner repacks depend on repacks, virus
+scan depends on everything, ...)</p>
+<p>Sample format:</p>
+<pre class="literal-block">
+A -&gt; B -&gt; C
+     B -&gt; D
+     B -[onfailure]-&gt; E
+</pre>
+<p>Where A,B,C,D,E are job ids. A is run first. If A succeeds, then B is run.
+If B succeeds, then C and D are run. If B fails, then E is run.</p>
+</div>
+<div class="section" id="job">
+<h2><a class="toc-backref" href="#id30">Job</a></h2>
+<p>A job is an object that has the following fields:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal">id</tt></dt>
+<dd><p class="first last">a unique identifier for the job</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal">command</tt></dt>
+<dd><p class="first last">the command to run</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal">tags</tt></dt>
+<dd><p class="first last">list of strings to tag the jobs with. some of these may be restricted
+due to policy</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><tt class="docutils literal">starttime/stoptime</tt></p>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal">status</tt></dt>
+<dd><p class="first last">a code indicating whether the job was successful, failed, etc.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><tt class="docutils literal">required_slave_tags</tt></dt>
+<dd><p class="first last">what type of slave this job needs</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">MOAR!</p>
+</li>
+</ul>
+</div>
+<p>* MOAR!</p>
+</div>
+<div class="section" id="access-control">
+<h1><a class="toc-backref" href="#id31">Access control</a></h1>
+<p><em>This section isn't finished yet - just some random thoughts here for now</em></p>
+<p>What about buckets? S3 gives coarse grain access control with
+buckets...that's nice!  It's also gives you a separate namespace per
+bucket, which is also nice!</p>
+<p>possible buckets:</p>
+<ul class="simple">
+<li>mozilla-central</li>
+<li>mozilla-inbound</li>
+<li>nanojit</li>
+<li>thunderbird/mozilla-central</li>
+<li>mozilla-release</li>
+<li>seamonkey/mozilla-central</li>
+<li>emscripten</li>
+<li>tenfourfox/mozilla-central</li>
+<li>fuzzing</li>
+</ul>
+<p>however, access control at a per bucket level would make it hard for
+community projects to be involved, unless they were given their own bucket.
+in the case of several projects based around a single repository, but
+spread across many buckets, status reporting tools (like tbpl) would need
+to know to look in different buckets for results. The <a class="reference internal" href="#status">status</a> API could
+include querying by bucket as well as by tag, or buckets could be an
+implicit tag.</p>
+<p>Can we have hierarchical name spaces?</p>
+<ul class="simple">
+<li>mozilla-central.firefox</li>
+<li>mozilla-central.tenfourfox</li>
+<li>mozilla-central.thunderbird</li>
+</ul>
+<p>instead, can we have ACLs on certain tags?</p>
+<dl class="docutils">
+<dt>e.g.:</dt>
+<dd><p class="first">&quot;mozilla-central&quot;: requires auth releng</p>
+<p>&quot;mozilla-central&quot;, &quot;static-analysis&quot;: requires auth foo</p>
+<p>&quot;mozilla-central&quot;, &quot;comm-central&quot;, &quot;seamonkey&quot;: requires auth bar</p>
+<p class="last">&quot;mozilla-central&quot;, &quot;release&quot;: requires auth releng</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="todo">
+<h1><a class="toc-backref" href="#id32">TODO</a></h1>
+<ul class="simple">
+<li>Policy control<ul>
+<li>who can run what type of jobs, and how often?</li>
+<li>control over tags</li>
+<li>resource allocation</li>
+</ul>
+</li>
+<li>Split up <a class="reference internal" href="#job-queue">job queue</a> into pieces that queue jobs, mark as runnable, etc.?<ul>
+<li>marking jobs as runnable is handled by a scheduler that manages job
+sets.</li>
+</ul>
+</li>
+<li>Integration with other tools, like tree status - when tree is closed,
+stop new jobs from getting scheduled. When infra fails, automatically
+close tree.</li>
+<li>Data integrity - how do we ensure that commands and build artifacts are
+transferred throughout the system without tampering</li>
+</ul>
+</div>
+</div>
+<div class="footer">
+<hr class="footer" />
+Generated on: 2012-01-28 15:17 UTC.
+
+</div>
+</body>
+</html>
