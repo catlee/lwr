@@ -322,78 +322,84 @@ ul.auto-toc {
 <ul class="simple">
 <li><a class="reference internal" href="#overview" id="id3">Overview</a><ul>
 <li><a class="reference internal" href="#goals" id="id4">Goals</a></li>
-<li><a class="reference internal" href="#anti-goals" id="id5">Anti-Goals</a></li>
-<li><a class="reference internal" href="#why-not-x" id="id6">Why not X?</a><ul>
-<li><a class="reference internal" href="#buildbot" id="id7">Buildbot</a></li>
-<li><a class="reference internal" href="#jenkins-hudson" id="id8">Jenkins/Hudson</a></li>
+<li><a class="reference internal" href="#use-cases" id="id5">Use cases</a></li>
+<li><a class="reference internal" href="#anti-goals" id="id6">Anti-Goals</a></li>
+<li><a class="reference internal" href="#why-not-x" id="id7">Why not X?</a><ul>
+<li><a class="reference internal" href="#buildbot" id="id8">Buildbot</a></li>
+<li><a class="reference internal" href="#jenkins-hudson" id="id9">Jenkins/Hudson</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#components" id="id9">Components</a><ul>
-<li><a class="reference internal" href="#planner" id="id10">Planner</a><ul>
-<li><a class="reference internal" href="#planner-job-queue" id="id11">Planner -&gt; Job Queue</a></li>
+<li><a class="reference internal" href="#components" id="id10">Components</a><ul>
+<li><a class="reference internal" href="#planner" id="id11">Planner</a><ul>
+<li><a class="reference internal" href="#planner-job-queue" id="id12">Planner -&gt; Job Queue</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#job-queue" id="id12">Job Queue</a><ul>
-<li><a class="reference internal" href="#http-api" id="id13">HTTP API</a></li>
-<li><a class="reference internal" href="#zmq-api" id="id14">ZMQ API</a></li>
-<li><a class="reference internal" href="#job-queue-slave-wrangler" id="id15">Job Queue -&gt; Slave Wrangler</a></li>
-<li><a class="reference internal" href="#job-queue-status" id="id16">Job Queue -&gt; Status</a></li>
+<li><a class="reference internal" href="#job-queue" id="id13">Job Queue</a><ul>
+<li><a class="reference internal" href="#http-api" id="id14">HTTP API</a></li>
+<li><a class="reference internal" href="#zmq-api" id="id15">ZMQ API</a></li>
+<li><a class="reference internal" href="#job-queue-slave-wrangler" id="id16">Job Queue -&gt; Slave Wrangler</a></li>
+<li><a class="reference internal" href="#job-queue-status" id="id17">Job Queue -&gt; Status</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#slave-wrangler" id="id17">Slave Wrangler</a><ul>
-<li><a class="reference internal" href="#slave-wrangler-slave" id="id18">Slave Wrangler -&gt; Slave</a></li>
+<li><a class="reference internal" href="#slave-wrangler" id="id18">Slave Wrangler</a><ul>
+<li><a class="reference internal" href="#slave-wrangler-slave" id="id19">Slave Wrangler -&gt; Slave</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#slave" id="id19">Slave</a><ul>
-<li><a class="reference internal" href="#slave-job-queue" id="id20">Slave -&gt; Job Queue</a></li>
-<li><a class="reference internal" href="#slave-files" id="id21">Slave -&gt; Files</a></li>
-<li><a class="reference internal" href="#slave-status" id="id22">Slave -&gt; Status</a></li>
+<li><a class="reference internal" href="#slave" id="id20">Slave</a><ul>
+<li><a class="reference internal" href="#slave-job-queue" id="id21">Slave -&gt; Job Queue</a></li>
+<li><a class="reference internal" href="#slave-files" id="id22">Slave -&gt; Files</a></li>
+<li><a class="reference internal" href="#slave-status" id="id23">Slave -&gt; Status</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#status" id="id23">Status</a><ul>
-<li><a class="reference internal" href="#id1" id="id24">HTTP API</a></li>
-<li><a class="reference internal" href="#id2" id="id25">ZMQ API</a></li>
-<li><a class="reference internal" href="#status-slave" id="id26">Status -&gt; Slave</a></li>
-<li><a class="reference internal" href="#status-event" id="id27">Status -&gt; Event</a></li>
+<li><a class="reference internal" href="#status" id="id24">Status</a><ul>
+<li><a class="reference internal" href="#id1" id="id25">HTTP API</a></li>
+<li><a class="reference internal" href="#id2" id="id26">ZMQ API</a></li>
+<li><a class="reference internal" href="#status-slave" id="id27">Status -&gt; Slave</a></li>
+<li><a class="reference internal" href="#status-event" id="id28">Status -&gt; Event</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#event" id="id28">Event</a><ul>
-<li><a class="reference internal" href="#event-planner" id="id29">Event -&gt; Planner</a></li>
+<li><a class="reference internal" href="#event" id="id29">Event</a><ul>
+<li><a class="reference internal" href="#event-planner" id="id30">Event -&gt; Planner</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#files" id="id30">Files</a><ul>
-<li><a class="reference internal" href="#files-slave" id="id31">Files -&gt; Slave</a></li>
+<li><a class="reference internal" href="#files" id="id31">Files</a><ul>
+<li><a class="reference internal" href="#files-slave" id="id32">Files -&gt; Slave</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#objects" id="id32">Objects</a><ul>
-<li><a class="reference internal" href="#scheduler" id="id33">Scheduler</a></li>
-<li><a class="reference internal" href="#job-set" id="id34">Job Set</a></li>
-<li><a class="reference internal" href="#job" id="id35">Job</a></li>
+<li><a class="reference internal" href="#objects" id="id33">Objects</a><ul>
+<li><a class="reference internal" href="#scheduler" id="id34">Scheduler</a></li>
+<li><a class="reference internal" href="#job-set" id="id35">Job Set</a></li>
+<li><a class="reference internal" href="#job" id="id36">Job</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#access-control" id="id36">Access control</a></li>
-<li><a class="reference internal" href="#resource-policies" id="id37">Resource policies</a></li>
-<li><a class="reference internal" href="#todo" id="id38">TODO</a></li>
+<li><a class="reference internal" href="#access-control" id="id37">Access control</a><ul>
+<li><a class="reference internal" href="#buckets" id="id38">Buckets</a></li>
+<li><a class="reference internal" href="#random-ideas" id="id39">random ideas</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resource-policies" id="id40">Resource policies</a></li>
+<li><a class="reference internal" href="#todo" id="id41">TODO</a></li>
 </ul>
 </div>
 <div class="section" id="overview">
 <h1><a class="toc-backref" href="#id3">Overview</a></h1>
 <p>Large Wooden Rabbit is the code name for the next generation of Release
 Engineering's build infrastructure.</p>
+<p><a class="reference external" href="http://people.mozilla.org/~asasaki/wb2/01-webbuild2.html">http://people.mozilla.org/~asasaki/wb2/01-webbuild2.html</a></p>
 <div class="section" id="goals">
 <h2><a class="toc-backref" href="#id4">Goals</a></h2>
 <p>LWR will:</p>
 <ul class="simple">
 <li>be open source</li>
-<li>be made of reuable components</li>
+<li>be made of reusable components</li>
 <li>be usable outside of Mozilla</li>
 <li>allow you to simply rebuild failed tasks, or hierarchies of tasks. These
 rebuilt tasks can satisfy previous dependency graphs.</li>
-<li>allow you to specify DAGs for job dependencies</li>
+<li>allow you to specify <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">DAGs</a> for job dependencies</li>
 <li>be able to change scheduling at run time via a web interface or API. some
 examples:<ul>
 <li>enable a new branch</li>
@@ -422,17 +428,102 @@ could be through direct connections, or a pubsub system.</li>
 </li>
 </ul>
 </div>
+<div class="section" id="use-cases">
+<h2><a class="toc-backref" href="#id5">Use cases</a></h2>
+<ol class="arabic">
+<li><p class="first">Ability to determine when a whole hierarchy of jobs has finished. For
+example, a developer's push to try triggers opt and debug builds on <em>N</em>
+platforms, and each one of those triggers tests. There can also be other
+types of jobs like valgrind or code analysis that.  Currently this is
+difficult in buildbot because there is a very weak correspondence
+betweeen builds and tests triggered via sendchange, as well as the
+asynchronous nature of buildbot scheduling.</p>
+<p>This is currently a pain point with our existing buildbot setup since
+there is no direct relationship between pushes, builds and tests.
+retries and nightly builds add to the confusion. Tools like autoland and
+buildapi have lots of complex code to try and get at all the jobs
+related to one push.</p>
+</li>
+<li><p class="first">Ability to determine what jobs a given event <em>would</em> trigger. Kind of
+like a --dry-run mode for planners. This would be used by people
+working on the planners to see if a change they made results in the
+expected jobs.</p>
+<p>This is currently very difficult to do with our existing configs since
+tests are triggered only after builds have finished, so you need to know
+how to line up the build's sendchange with the test schedulers.</p>
+</li>
+<li><p class="first">Cancel a running or pending job.</p>
+</li>
+<li><p class="first">Pause a running job for inspection.
+Arthur, a graphics developer, is trying to track down a test failure. He
+would like to interrupt a running job so that the machine state can
+be inspected while the test is being run. Arthur logs into LWR's web
+interface and sees that a test job is running. He selects the job and
+clicks the &quot;pause button&quot; and then asks buildduty to have a look at the
+machine.</p>
+<p>This is currently impossible to do.</p>
+</li>
+<li><p class="first">Add support for a new branch</p>
+</li>
+<li><p class="first">Test a new planner
+Bilbo, a release engineer, is testing out a change to the
+mozilla-firefox-branch.py planner that creates build and test jobs for
+pushes to firefox repositories. He's already written unittest for the
+planner and verified that it's worked correctly with local testing.
+However, given last week's busted landing, he would like to run this
+side-by-side the existing production planner before going live with
+it.</p>
+<p>Bilbo logs into LWR's web interface and navigates to the planners
+page. He copies the entry for production version of
+mozilla-firefox-branch.py. He modifies his copy to pull from his user
+repository and to report to his bucket, and then clicks &quot;Save changes.&quot;</p>
+<p>From that point on, all the same events which cause
+mozilla-firefox-branch to run will cause Bilbo's modified planner to
+run as well.</p>
+<p>We try and accomplish this currently by running things in our staging
+environment. The problems with this are that the staging slaves are
+often tainted by previous work, there are not enough resources to go
+around, and it's impractical to test all the affected builders for many
+changes.</p>
+</li>
+<li><p class="first">Hal, a mobile developer, is trying to get a new test suite up and
+running for the android builds. He would like to test his new robocop
+test using the test code in his repository against last night's android
+build.</p>
+<p>Because Hal doesn't need all the newfangled features of LWR's planners,
+he decides to kick off the tests manually. The first time Hal needs to
+do this, he logs onto LWR's interface and goes to the Jobs section. He
+selects 'new job' which opens an interface that allows him to specify
+which script will be run, which parameters to pass it it and which
+slave(s) to run the job on. When he's done, he can click on 'do it!',
+which will create his new job in the <a class="reference internal" href="#job-queue">job queue</a>.</p>
+<p>If this is not his first time doing this, he can go to the status
+interface of LWR and find his previous test run by searching for jobs
+with his username associated with them, or with the string 'robocop' in
+their name. He can then select 'edit &amp; run again' which will open an
+interface that allows him to edit the parameters of the test run.
+Excited that he'll finally be able to get the tests passing, he updates
+the revision of his test repository that the test job is using, and
+clicks 'do it!'.</p>
+<p>Joel is Hal's manager, and wants to see how far along Hal is to
+completing his work since the deadline is next week. He also can use the
+status interface of LWR to look at all of Hal's jobs and filter out all
+the jobs except robocop. Happily the tests have just started passing.</p>
+</li>
+</ol>
+</div>
 <div class="section" id="anti-goals">
-<h2><a class="toc-backref" href="#id5">Anti-Goals</a></h2>
+<h2><a class="toc-backref" href="#id6">Anti-Goals</a></h2>
 <p>LWR will not:</p>
 <ul class="simple">
+<li>replace <a class="reference external" href="http://tbpl.mozilla.org">TBPL</a>, although it should simplify fetching of build results</li>
 <li>gain you access to fortified french castles</li>
 </ul>
 </div>
 <div class="section" id="why-not-x">
-<h2><a class="toc-backref" href="#id6">Why not X?</a></h2>
+<h2><a class="toc-backref" href="#id7">Why not X?</a></h2>
 <div class="section" id="buildbot">
-<h3><a class="toc-backref" href="#id7">Buildbot</a></h3>
+<h3><a class="toc-backref" href="#id8">Buildbot</a></h3>
 <p>Buildbot has served us well, but has a few fundamental limitations that
 are very difficult to change or work around:</p>
 <ul class="simple">
@@ -461,7 +552,7 @@ complex.</li>
 </ul>
 </div>
 <div class="section" id="jenkins-hudson">
-<h3><a class="toc-backref" href="#id8">Jenkins/Hudson</a></h3>
+<h3><a class="toc-backref" href="#id9">Jenkins/Hudson</a></h3>
 <p>Jenkins seems well suited to simple processes, but for handling a large set
 of complex tasks.</p>
 <p>I really don't know it well enough to evaluate though. It's written in java
@@ -470,10 +561,10 @@ though :\</p>
 </div>
 </div>
 <div class="section" id="components">
-<h1><a class="toc-backref" href="#id9">Components</a></h1>
+<h1><a class="toc-backref" href="#id10">Components</a></h1>
 <img alt="arch.png" src="arch.png" />
 <div class="section" id="planner">
-<h2><a class="toc-backref" href="#id10">Planner</a></h2>
+<h2><a class="toc-backref" href="#id11">Planner</a></h2>
 <p>The planner is responsible for responding to events and creating new jobs.
 The planner maintains a list of <a class="reference internal" href="#scheduler">Scheduler</a>s that respond to incoming
 events and create new jobs to run in reponse to those events.</p>
@@ -487,7 +578,7 @@ notifies the <a class="reference internal" href="#job-queue">job queue</a> of ne
 </div>
 </div>
 <div class="section" id="job-queue">
-<h2><a class="toc-backref" href="#id12">Job Queue</a></h2>
+<h2><a class="toc-backref" href="#id13">Job Queue</a></h2>
 <p>The <a class="reference internal" href="#job-queue">job queue</a> is responsible for tracking new jobs, sending them for
 execution to the <a class="reference internal" href="#slave-wrangler">slave wrangler</a> if required, or queuing them up for later
 processing.</p>
@@ -498,8 +589,14 @@ It's a bit weird that there's little reading done from the queue. It looks
 like a scheduler will have to query <a class="reference internal" href="#status">status</a> to find old jobs/jobsets to act
 on. either that or <a class="reference internal" href="#job-queue">job queue</a> will duplicate a lot of <a class="reference internal" href="#status">status</a>, which
 doesn't seem like a good idea.</p>
+<p>Although, these scheduling decisions are inherently racey and
+asynchronous, so perhaps splitting it up is fine.</p>
+<p>One of the primary uses that would involve both getting other job statuses
+and modifying others is schedulers that merge pending requests. They need
+to get a list of pending jobs of a certain type (TODO: figure out if this
+is easy or not!), and mark the older ones are merged.</p>
 <div class="section" id="http-api">
-<h3><a class="toc-backref" href="#id13">HTTP API</a></h3>
+<h3><a class="toc-backref" href="#id14">HTTP API</a></h3>
 <dl class="docutils">
 <dt><tt class="docutils literal">POST <span class="pre">/jobqueue/v0.1/&lt;bucket&gt;/jobs</span></tt></dt>
 <dd>create a new job
@@ -508,11 +605,14 @@ the id for the job is returned by this call</dd>
 <dd>fire a trigger
 TODO: Use events for this instead?</dd>
 <dt><tt class="docutils literal">PUT <span class="pre">/jobqueue/v0.1/&lt;bucket&gt;/job/&lt;jobid&gt;</span></tt></dt>
-<dd>modify this job's state to cancel it, merge it, etc.</dd>
+<dd><p class="first">modify this job's state to cancel it, merge it, etc.</p>
+<p>post-data:</p>
+<p class="last">state=running, cancelled, paused, merged, etc.</p>
+</dd>
 </dl>
 </div>
 <div class="section" id="zmq-api">
-<h3><a class="toc-backref" href="#id14">ZMQ API</a></h3>
+<h3><a class="toc-backref" href="#id15">ZMQ API</a></h3>
 <p>The <a class="reference internal" href="#job-queue">job queue</a> server(s) listen on a REP socket. Requests are made by
 clients using a REQ socket with the following format:</p>
 <p>TODO</p>
@@ -526,12 +626,12 @@ clients using a REQ socket with the following format:</p>
 <div class="section" id="job-queue-status">
 <h3><a class="reference internal" href="#job-queue">Job Queue</a> -&gt; <a class="reference internal" href="#status">Status</a></h3>
 <ul class="simple">
-<li>Job A is new, running, pending, etc.</li>
+<li>Job A is new, running, pending, merged, etc.</li>
 </ul>
 </div>
 </div>
 <div class="section" id="slave-wrangler">
-<h2><a class="toc-backref" href="#id17">Slave Wrangler</a></h2>
+<h2><a class="toc-backref" href="#id18">Slave Wrangler</a></h2>
 <p>Receives jobs from the <a class="reference internal" href="#job-queue">job queue</a> and runs them on slaves.</p>
 <p>Mostly just a broker to talk to slaves.</p>
 <div class="section" id="slave-wrangler-slave">
@@ -542,7 +642,7 @@ clients using a REQ socket with the following format:</p>
 </div>
 </div>
 <div class="section" id="slave">
-<h2><a class="toc-backref" href="#id19">Slave</a></h2>
+<h2><a class="toc-backref" href="#id20">Slave</a></h2>
 <p>Slaves do work!</p>
 <div class="section" id="slave-job-queue">
 <h3><a class="reference internal" href="#slave">Slave</a> -&gt; <a class="reference internal" href="#job-queue">Job Queue</a></h3>
@@ -576,10 +676,10 @@ subscriptions to event types work for the jobset scheduler)</li>
 </div>
 </div>
 <div class="section" id="status">
-<h2><a class="toc-backref" href="#id23">Status</a></h2>
+<h2><a class="toc-backref" href="#id24">Status</a></h2>
 <p>Get and retrieve status on individual jobs and job sets.</p>
 <div class="section" id="id1">
-<h3><a class="toc-backref" href="#id24">HTTP API</a></h3>
+<h3><a class="toc-backref" href="#id25">HTTP API</a></h3>
 <dl class="docutils">
 <dt><tt class="docutils literal">GET <span class="pre">/status/v0.1/&lt;bucket&gt;/jobs/&lt;jobid&gt;</span></tt></dt>
 <dd>get status about job $jobid</dd>
@@ -601,7 +701,7 @@ create new jobset</dd>
 <p>Except for searching for things by tag, this looks an awful lot like S3....</p>
 </div>
 <div class="section" id="id2">
-<h3><a class="toc-backref" href="#id25">ZMQ API</a></h3>
+<h3><a class="toc-backref" href="#id26">ZMQ API</a></h3>
 <p>The <a class="reference internal" href="#status">Status</a> server(s) listen on a REP socket. Requests are made by clients
 using a REQ socket with the following format:</p>
 <ul>
@@ -648,7 +748,7 @@ using a REQ socket with the following format:</p>
 </div>
 </div>
 <div class="section" id="event">
-<h2><a class="toc-backref" href="#id28">Event</a></h2>
+<h2><a class="toc-backref" href="#id29">Event</a></h2>
 <p>Events are used by a few things in LWR:
 * notifications of external things that require action, e.g.</p>
 <blockquote>
@@ -683,7 +783,7 @@ check' are run.</li>
 </div>
 </div>
 <div class="section" id="files">
-<h2><a class="toc-backref" href="#id30">Files</a></h2>
+<h2><a class="toc-backref" href="#id31">Files</a></h2>
 <p>Files and logs go here.</p>
 <p>The APIs for this should be pretty simple. You need to be able to upload a file and get back a URL. The existing scp / post_upload.py would suffice.</p>
 <div class="section" id="files-slave">
@@ -695,9 +795,9 @@ check' are run.</li>
 </div>
 </div>
 <div class="section" id="objects">
-<h1><a class="toc-backref" href="#id32">Objects</a></h1>
+<h1><a class="toc-backref" href="#id33">Objects</a></h1>
 <div class="section" id="scheduler">
-<h2><a class="toc-backref" href="#id33">Scheduler</a></h2>
+<h2><a class="toc-backref" href="#id34">Scheduler</a></h2>
 <p>A scheduler is basically a job template with a list of event subscriptions.
 The job template will be instantiated when a matching event is received by
 the planner. The event will be attached to the job and then sent to the
@@ -721,7 +821,7 @@ between them.</li>
 </ul>
 </div>
 <div class="section" id="job-set">
-<h2><a class="toc-backref" href="#id34">Job Set</a></h2>
+<h2><a class="toc-backref" href="#id35">Job Set</a></h2>
 <p>A job set is a <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a> that describes a hierarchy of jobs
 to run and how they're related. An example would be the set of builds
 created for an hg push, and the tests for that build. The tests depend on
@@ -751,7 +851,7 @@ ids. Once the jobset is submitted the jobset scheduler will run and mark
 any jobs in the jobset as runnable.</p>
 </div>
 <div class="section" id="job">
-<h2><a class="toc-backref" href="#id35">Job</a></h2>
+<h2><a class="toc-backref" href="#id36">Job</a></h2>
 <p>A job is an object that has the following fields:</p>
 <ul>
 <li><dl class="first docutils">
@@ -791,6 +891,9 @@ due to policy</p>
 <dt><tt class="docutils literal">finished</tt></dt>
 <dd><p class="first last">this job is done</p>
 </dd>
+<dt><tt class="docutils literal">paused</tt></dt>
+<dd><p class="first last">this job has been paused by a user</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -814,7 +917,62 @@ due to policy</p>
 <p>* MOAR!</p>
 </div>
 <div class="section" id="access-control">
-<h1><a class="toc-backref" href="#id36">Access control</a></h1>
+<h1><a class="toc-backref" href="#id37">Access control</a></h1>
+<p>There are at least two options under consideration for managing access
+control. We will attempt to outline them here so that a decision can be
+reached.</p>
+<p>The goals for access control are:</p>
+<ol class="arabic simple">
+<li>allow community projects to submit results without risk of polluting
+other projects' data</li>
+<li>make it possible to identify the canonical builds and test results for
+any project</li>
+<li>identify the 'owner' for jobs, planners, and files for resource
+allocation</li>
+<li>make it possible to have jobs and results that are non-public (e.g.
+fuzzing, work for security bugs)</li>
+<li>allow users to create their own planners, and to manage their own jobs.</li>
+<li>make it possible to submit auxilliary information to existing projects
+(e.g. tier-2 builds, static analysis of mozilla-central)</li>
+</ol>
+<div class="section" id="buckets">
+<h2><a class="toc-backref" href="#id38">Buckets</a></h2>
+<p>Every planner, job, status object, file has another piece of metadata
+attached which is called its bucket.</p>
+<p>There also exist users and groups in the system.</p>
+<p>Buckets have a list of users and groups with read/write permissions.</p>
+<p>Planners create jobs in their own bucket. Jobs report results to the same
+bucket.</p>
+<p>How does it accomplish the goals?</p>
+<ol class="arabic simple">
+<li>since results for jobs are contained to their bucket, there is no risk
+of pollution. each project (e.g. 'firefox', 'jetpack', 'thunderbird',
+'seamonkey') could have its own bucket.</li>
+<li>owners of the jobs can tag items in their bucket with 'official' if it's
+desirable for them to do that. presumably only builds/tests in the
+'firefox' are canonical. extra tags could be added to distinguish dep
+builds from nightlies from release, etc.</li>
+<li>resource allocation could be done per bucket rather than for individual
+users or groups.</li>
+<li>non-public jobs would go into buckets with limited read/write access</li>
+<li>a user with write permissions to a bucket is able to create/modify the
+set of planners. the same technique could be used to allow running new
+jobs, cancelling running ones, etc.</li>
+<li>leave it to the status displays (e.g. tbpl) to select which buckets and
+results they want to look at</li>
+</ol>
+<p>Pros:</p>
+<ul class="simple">
+<li>simple</li>
+</ul>
+<p>Cons:</p>
+<ul class="simple">
+<li>puts more burden on status displays to look in all buckets they're
+interested in. this could be a good thing, it enforces goal 1.</li>
+</ul>
+</div>
+<div class="section" id="random-ideas">
+<h2><a class="toc-backref" href="#id39">random ideas</a></h2>
 <p><em>This section isn't finished yet - just some random thoughts here for now</em></p>
 <p>What about buckets? S3 gives coarse grain access control with
 buckets...that's nice!  It's also gives you a separate namespace per
@@ -858,8 +1016,9 @@ implicit tag.</p>
 ACLs on sets of tags seems complicated.</p>
 <p>having a single flat bucket namespace is clean and simple.</p>
 </div>
+</div>
 <div class="section" id="resource-policies">
-<h1><a class="toc-backref" href="#id37">Resource policies</a></h1>
+<h1><a class="toc-backref" href="#id40">Resource policies</a></h1>
 <p>We need to enforce certain kind of resource policies or prioritizations,
 e.g.:</p>
 <ul class="simple">
@@ -871,45 +1030,86 @@ doesn't consume all available slaves</li>
 </ul>
 </div>
 <div class="section" id="todo">
-<h1><a class="toc-backref" href="#id38">TODO</a></h1>
+<h1><a class="toc-backref" href="#id41">TODO</a></h1>
+<ul>
+<li><p class="first">Policy control</p>
 <ul class="simple">
-<li>Policy control<ul>
 <li>who can run what type of jobs, and how often?</li>
 <li>control over tags</li>
 <li>resource allocation</li>
 </ul>
 </li>
-<li>Split up <a class="reference internal" href="#job-queue">job queue</a> into pieces that queue jobs, mark as runnable, etc.?<ul>
+<li><p class="first">Split up <a class="reference internal" href="#job-queue">job queue</a> into pieces that queue jobs, mark as runnable, etc.?</p>
+<ul class="simple">
 <li>marking jobs as runnable is handled by a scheduler that manages job
 sets.</li>
 </ul>
 </li>
-<li>Integration with other tools, like tree status - when tree is closed,
+<li><p class="first">Integration with other tools, like tree status - when tree is closed,
 stop new jobs from getting scheduled. When infra fails, automatically
-close tree.</li>
-<li>Data integrity - how do we ensure that commands and build artifacts are
-transferred throughout the system without tampering</li>
-<li>Managing secrets. Lots of times we have slaves deal with sensitive
-information. How can we get secrets on and off of the slaves securely?</li>
-<li>Log streaming. It would be nice to be stream log files to developers. I
-think zmq would be great for this.</li>
-<li>MOAR buckets!<ul>
+close tree.</p>
+</li>
+<li><p class="first">Data integrity - how do we ensure that commands and build artifacts are
+transferred throughout the system without tampering</p>
+</li>
+<li><p class="first">Managing secrets. Lots of times we have slaves deal with sensitive
+information. How can we get secrets on and off of the slaves securely?</p>
+</li>
+<li><p class="first">Log streaming. It would be nice to be stream log files to developers. I
+think zmq would be great for this.</p>
+</li>
+<li><p class="first">MOAR buckets!</p>
+<ul class="simple">
 <li>planner could list schedulers by bucket. auth'ed users could change the
 scheduling for their bucket</li>
 <li>events are per bucket</li>
 <li>files are per bucket</li>
 </ul>
 </li>
-<li>specify ZMQ message encoding</li>
-<li>reaper
-ttls</li>
-<li>timers (for generating events)</li>
+<li><p class="first">specify ZMQ message encoding</p>
+</li>
+<li><p class="first">reaper
+ttls</p>
+</li>
+<li><p class="first">chaos monkey</p>
+</li>
+<li><p class="first">timers (for generating events)</p>
+</li>
+<li><p class="first">is merging in the scheduler the right thing to do?
+a scheduler has the context and knowledge for what types of jobs are
+mergable and not, and how many could be merged at once</p>
+<p>buildbot currently merges at the time when jobs are assigned to slaves</p>
+</li>
+<li><p class="first">performance monitoring, correspond to build 'steps'</p>
+<blockquote>
+<ul class="simple">
+<li>mozharness could dump out current step to well defined location
+(file)</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">breakpoints for jobs? (supported by extra data sent in event, passed
+along to mozharness script?) job can pause itself? pause-after-run.</p>
+</li>
+<li><p class="first">integrate vnc / console?</p>
+</li>
+<li><p class="first">jobs that span slaves</p>
+</li>
+<li><p class="first">&quot;reserving&quot; slaves between jobs</p>
+</li>
+<li><p class="first">where does job prioritization happen? can it be a separate script?</p>
+</li>
+<li><p class="first">Figure out ACLs / buckets / etc.</p>
+</li>
+<li><p class="first">Configuration-as-code has the advantage of being able to put the
+configuration in source control.</p>
+</li>
 </ul>
 </div>
 </div>
 <div class="footer">
 <hr class="footer" />
-Generated on: 2012-03-27 15:03 UTC.
+Generated on: 2012-03-27 15:20 UTC.
 
 </div>
 </body>
