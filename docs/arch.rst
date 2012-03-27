@@ -9,17 +9,19 @@ Overview
 Large Wooden Rabbit is the code name for the next generation of Release
 Engineering's build infrastructure.
 
+http://people.mozilla.org/~asasaki/wb2/01-webbuild2.html
+
 -----
 Goals
 -----
 LWR will:
 
 * be open source
-* be made of reuable components
+* be made of reusable components
 * be usable outside of Mozilla
 * allow you to simply rebuild failed tasks, or hierarchies of tasks. These
   rebuilt tasks can satisfy previous dependency graphs.
-* allow you to specify DAGs for job dependencies
+* allow you to specify DAGs_ for job dependencies
 * be able to change scheduling at run time via a web interface or API. some
   examples:
 
@@ -47,12 +49,109 @@ LWR will:
   * allow external community systems to connect and get jobs from LWR. This
     could be through direct connections, or a pubsub system.
 
+.. _DAGs: http://en.wikipedia.org/wiki/Directed_acyclic_graph
+
+---------
+Use cases
+---------
+#. Ability to determine when a whole hierarchy of jobs has finished. For
+   example, a developer's push to try triggers opt and debug builds on *N*
+   platforms, and each one of those triggers tests. There can also be other
+   types of jobs like valgrind or code analysis that.  Currently this is
+   difficult in buildbot because there is a very weak correspondence
+   betweeen builds and tests triggered via sendchange, as well as the
+   asynchronous nature of buildbot scheduling.
+
+   This is currently a pain point with our existing buildbot setup since
+   there is no direct relationship between pushes, builds and tests.
+   retries and nightly builds add to the confusion. Tools like autoland and
+   buildapi have lots of complex code to try and get at all the jobs
+   related to one push.
+
+#. Ability to determine what jobs a given event *would* trigger. Kind of
+   like a --dry-run mode for planners. This would be used by people
+   working on the planners to see if a change they made results in the
+   expected jobs.
+
+   This is currently very difficult to do with our existing configs since
+   tests are triggered only after builds have finished, so you need to know
+   how to line up the build's sendchange with the test schedulers.
+
+#. Cancel a running or pending job.
+
+#. Pause a running job for inspection.
+   Arthur, a graphics developer, is trying to track down a test failure. He
+   would like to interrupt a running job so that the machine state can
+   be inspected while the test is being run. Arthur logs into LWR's web
+   interface and sees that a test job is running. He selects the job and
+   clicks the "pause button" and then asks buildduty to have a look at the
+   machine.
+
+   This is currently impossible to do.
+
+#. Add support for a new branch
+
+#. Test a new planner
+   Bilbo, a release engineer, is testing out a change to the
+   mozilla-firefox-branch.py planner that creates build and test jobs for
+   pushes to firefox repositories. He's already written unittest for the
+   planner and verified that it's worked correctly with local testing.
+   However, given last week's busted landing, he would like to run this
+   side-by-side the existing production planner before going live with
+   it.
+
+   Bilbo logs into LWR's web interface and navigates to the planners
+   page. He copies the entry for production version of
+   mozilla-firefox-branch.py. He modifies his copy to pull from his user
+   repository and to report to his bucket, and then clicks "Save changes."
+
+   From that point on, all the same events which cause
+   mozilla-firefox-branch to run will cause Bilbo's modified planner to
+   run as well.
+
+   We try and accomplish this currently by running things in our staging
+   environment. The problems with this are that the staging slaves are
+   often tainted by previous work, there are not enough resources to go
+   around, and it's impractical to test all the affected builders for many
+   changes.
+
+#. Hal, a mobile developer, is trying to get a new test suite up and
+   running for the android builds. He would like to test his new robocop
+   test using the test code in his repository against last night's android
+   build.
+
+   Because Hal doesn't need all the newfangled features of LWR's planners,
+   he decides to kick off the tests manually. The first time Hal needs to
+   do this, he logs onto LWR's interface and goes to the Jobs section. He
+   selects 'new job' which opens an interface that allows him to specify
+   which script will be run, which parameters to pass it it and which
+   slave(s) to run the job on. When he's done, he can click on 'do it!',
+   which will create his new job in the `job queue`_.
+
+   If this is not his first time doing this, he can go to the status
+   interface of LWR and find his previous test run by searching for jobs
+   with his username associated with them, or with the string 'robocop' in
+   their name. He can then select 'edit & run again' which will open an
+   interface that allows him to edit the parameters of the test run.
+   Excited that he'll finally be able to get the tests passing, he updates
+   the revision of his test repository that the test job is using, and
+   clicks 'do it!'.
+
+   Joel is Hal's manager, and wants to see how far along Hal is to
+   completing his work since the deadline is next week. He also can use the
+   status interface of LWR to look at all of Hal's jobs and filter out all
+   the jobs except robocop. Happily the tests have just started passing.
+   
 ----------
 Anti-Goals
 ----------
 LWR will not:
 
+* replace TBPL_, although it should simplify fetching of build results
+
 * gain you access to fortified french castles 
+
+.. _TBPL: http://tbpl.mozilla.org
 
 ----------
 Why not X?
@@ -133,6 +232,14 @@ like a scheduler will have to query status_ to find old jobs/jobsets to act
 on. either that or `job queue`_ will duplicate a lot of status_, which
 doesn't seem like a good idea.
 
+Although, these scheduling decisions are inherently racey and
+asynchronous, so perhaps splitting it up is fine.
+
+One of the primary uses that would involve both getting other job statuses
+and modifying others is schedulers that merge pending requests. They need
+to get a list of pending jobs of a certain type (TODO: figure out if this
+is easy or not!), and mark the older ones are merged.
+
 HTTP API
 --------
 
@@ -146,6 +253,10 @@ HTTP API
 
 ``PUT /jobqueue/v0.1/<bucket>/job/<jobid>``
     modify this job's state to cancel it, merge it, etc.
+
+    post-data:
+
+    state=running, cancelled, paused, merged, etc.
 
 ZMQ API
 -------
@@ -161,7 +272,7 @@ TODO
 
 `Job Queue`_ -> Status_
 -----------------------
-* Job A is new, running, pending, etc.
+* Job A is new, running, pending, merged, etc.
 
 --------------
 Slave Wrangler
@@ -407,6 +518,8 @@ A job is an object that has the following fields:
         this job is running
     ``finished``
         this job is done
+    ``paused``
+        this job has been paused by a user
 
 * ``status``
     a code indicating whether the job was successful, failed, etc.
@@ -418,6 +531,79 @@ A job is an object that has the following fields:
 
 Access control
 ==============
+
+There are at least two options under consideration for managing access
+control. We will attempt to outline them here so that a decision can be
+reached.
+
+The goals for access control are:
+
+1. allow community projects to submit results without risk of polluting
+   other projects' data
+
+2. make it possible to identify the canonical builds and test results for
+   any project
+
+3. identify the 'owner' for jobs, planners, and files for resource
+   allocation
+
+4. make it possible to have jobs and results that are non-public (e.g.
+   fuzzing, work for security bugs)
+
+5. allow users to create their own planners, and to manage their own jobs.
+
+6. make it possible to submit auxilliary information to existing projects
+   (e.g. tier-2 builds, static analysis of mozilla-central)
+
+-------
+Buckets
+-------
+Every planner, job, status object, file has another piece of metadata
+attached which is called its bucket.
+
+There also exist users and groups in the system.
+
+Buckets have a list of users and groups with read/write permissions.
+
+Planners create jobs in their own bucket. Jobs report results to the same
+bucket.
+
+How does it accomplish the goals?
+
+1. since results for jobs are contained to their bucket, there is no risk
+   of pollution. each project (e.g. 'firefox', 'jetpack', 'thunderbird',
+   'seamonkey') could have its own bucket.
+
+2. owners of the jobs can tag items in their bucket with 'official' if it's
+   desirable for them to do that. presumably only builds/tests in the
+   'firefox' are canonical. extra tags could be added to distinguish dep
+   builds from nightlies from release, etc.
+
+3. resource allocation could be done per bucket rather than for individual
+   users or groups. 
+
+4. non-public jobs would go into buckets with limited read/write access
+
+5. a user with write permissions to a bucket is able to create/modify the
+   set of planners. the same technique could be used to allow running new
+   jobs, cancelling running ones, etc.
+
+6. leave it to the status displays (e.g. tbpl) to select which buckets and
+   results they want to look at
+
+Pros:
+
+* simple
+
+Cons:
+
+* puts more burden on status displays to look in all buckets they're
+  interested in. this could be a good thing, it enforces goal 1.
+
+
+------------
+random ideas
+------------
 *This section isn't finished yet - just some random thoughts here for now*
 
 What about buckets? S3 gives coarse grain access control with
@@ -522,4 +708,33 @@ TODO
 * reaper
   ttls
 
+* chaos monkey
+
 * timers (for generating events)
+
+* is merging in the scheduler the right thing to do?
+  a scheduler has the context and knowledge for what types of jobs are
+  mergable and not, and how many could be merged at once
+
+  buildbot currently merges at the time when jobs are assigned to slaves
+
+* performance monitoring, correspond to build 'steps'
+
+    * mozharness could dump out current step to well defined location
+      (file)
+
+* breakpoints for jobs? (supported by extra data sent in event, passed
+  along to mozharness script?) job can pause itself? pause-after-run.
+
+* integrate vnc / console?
+
+* jobs that span slaves
+
+* "reserving" slaves between jobs
+
+* where does job prioritization happen? can it be a separate script?
+
+* Figure out ACLs / buckets / etc.
+
+* Configuration-as-code has the advantage of being able to put the
+  configuration in source control.
