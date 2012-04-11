@@ -49,11 +49,16 @@ LWR will:
   * allow external community systems to connect and get jobs from LWR. This
     could be through direct connections, or a pubsub system.
 
+* Logs and build artifacts are first class objects, not side-effects of
+  jobs. LWR will provide clear tools for uploading and referring to logs
+  and build artifacts.
+
 .. _DAGs: http://en.wikipedia.org/wiki/Directed_acyclic_graph
 
 ---------
 Use cases
 ---------
+
 #. Ability to determine when a whole hierarchy of jobs has finished. For
    example, a developer's push to try triggers opt and debug builds on *N*
    platforms, and each one of those triggers tests. There can also be other
@@ -188,14 +193,40 @@ are very difficult to change or work around:
   databases is complicated; exports to other applications is expensive and
   complex.
 
+if we were to modify buildbot, this is what we would need to change:
+
+* improved master <-> slave connection. a dropped connection shouldn't fail
+  a build. a slave should be able to fail over to another master
+
+* status should be in a database. it should be easy to run something like
+  tbpl on top of the database.
+
+* more flexible scheduling - external scheduling scripts
+
+* build hierarchies
+
+* better integration of logging - should be easier to treat as a build
+  artifact
+
+wishlist:
+
+* zmq
+
+* gevent? (TODO is there a twisted reactor implemented with gevent?)
+
+questions:
+
+* how can external contributers work with it?
+
+* can we support one-off custom jobs? developer maintained jobs?
+
 Jenkins/Hudson
 --------------
-Jenkins seems well suited to simple processes, but for handling a large set
-of complex tasks.
+Jenkins seems well suited to simple processes, but not for handling a large
+set of complex tasks.
 
 I really don't know it well enough to evaluate though. It's written in java
 though :\\
-
 
 Components
 ==========
@@ -206,8 +237,52 @@ Components
 Planner
 -------
 The planner is responsible for responding to events and creating new jobs.
-The planner maintains a list of Scheduler_\ s that respond to incoming
+The planner maintains a list of plan_\ s that respond to incoming
 events and create new jobs to run in reponse to those events.
+
+ZMQ API
+-------
+The planner listens on a REP socket for `event`_\ s using the regular ZMQ_
+protocol and replies with ``{"ok": true, "id": event_id}`` if the event was
+accepted. ``"id"`` is optional depending if there is an event store or not.
+If the event can't be processed for some reason, the planner should respond
+with e.g. ``{"ok": false, "msg": "too many fizzbangs"}``.
+
+HTTP API
+--------
+The planner provides a pretty web interface built on top of a web API.
+
+V0.1 Planner HTTP API
+~~~~~~~~~~~~~~~~~~~~~
+``GET /planner/v0.1/<bucket>``
+    lists all plans in this bucket
+
+``POST /planner/v0.1/<bucket>``
+    create a new plan
+
+``PUT /planner/v0.1/<bucket>/<plan_id>``
+    update a plan
+
+``DELETE /planner/v0.1/<bucket>/<plan_id>``
+    delete a plan
+
+See plan_ for the object specification.
+
+The ``owner`` field can be ommitted in which case the currently logged in
+user is set as the owner. It can also be set to any user or group with read
+access to the bucket.
+
+The ``bucket`` field of the scheduler is implicit in the API call and
+cannot be overridden.
+
+A scheduler here is a json document like::
+
+    {
+        "event_types": [...],
+        "job_template": {...},
+        "data": {...},
+        "owner": "owner or group",
+    }
 
 `Planner`_ -> `Job Queue`_
 --------------------------
@@ -215,6 +290,12 @@ The `planner`_ has a one-way communication with the `job queue`_, it simply
 notifies the `job queue`_ of new jobs to run.
 
 * New job
+
+Event_ -> Planner_
+------------------
+* new pushes to hg / git / cvs / etc.
+* triggers
+* builds starting / builds stopping
 
 ---------
 Job Queue
@@ -244,11 +325,11 @@ HTTP API
 --------
 
 ``POST /jobqueue/v0.1/<bucket>/jobs``
-    create a new job
-    the id for the job is returned by this call
+    create a new job.
+    the id for the job is returned by this call.
 
 ``POST /jobqueue/v0.1/<bucket>/job/<jobid>/trigger``
-    fire a trigger
+    fire a trigger.
     TODO: Use events for this instead?
 
 ``PUT /jobqueue/v0.1/<bucket>/job/<jobid>``
@@ -379,9 +460,30 @@ Status_ -> Event_
 * job added
 
 -----
+Files
+-----
+Files and logs go here.
+
+The APIs for this should be pretty simple. You need to be able to upload a file and get back a URL. The existing scp / post_upload.py would suffice.
+
+Files_ -> Slave_
+----------------
+* Download files
+
+Object and type Definitions
+===========================
+
+---------------
+Dates and times
+---------------
+Dates and times will be transferred as unix timestamps (seconds since Jan
+1, 1970 UTC).
+
+-----
 Event
 -----
 Events are used by a few things in LWR:
+
 * notifications of external things that require action, e.g.
 
   * hg pushes
@@ -399,60 +501,101 @@ Events are used by a few things in LWR:
 
 * most events are published for external consumers via http or rmq
 
-  * event publishing controlled by bucket policy?
+* event publishing is controlled by bucket policy
 
-Events are specified as a tuple ``(bucket.name, data)``, eg.
-``('releng.hg.mozilla-central', {'revision': 'abcdef123456'})``
+Events are specified as a dictionary / object.
 
-Event_ -> Planner_
-------------------
-* new pushes to hg / git / cvs / etc.
-* triggers
-* builds starting / builds stopping
+Version 0
+---------
+::
 
------
-Files
------
-Files and logs go here.
+    key     description
+    ---     -----------
+    v       version - set to the number 0
+    owner   name of who sent this event
+    bucket  what bucket this event belongs to
+    name    what this event is called
+    data    event specific data
+    log     a list of (time, description) tuples listing where this event
+            was created, where it was received, etc. the format of
+            description is unspecified.
+    sigs    a list of signatures
 
-The APIs for this should be pretty simple. You need to be able to upload a file and get back a URL. The existing scp / post_upload.py would suffice.
-
-Files_ -> Slave_
-----------------
-* Download files
-
-Objects
-=======
+    For example:
+    {
+        "v": 0,
+        "owner": "hg",
+        "bucket": "public",
+        "name": "hg.pushes.mozilla-central",
+        "data": {
+                    "rev": "1234567890abcdef",
+                    "pusher": "joe",
+                    "time": 123456789,
+                },
+        "sigs": [
+                {"v": 0, "type": "null"},
+                ],
+        "log": [
+                (123456789, {"created_by": "hg on hg2.scl3.mozilla.com"}),
+                (123456790, {"received_by": "planner on lwr1.build.scl3.mozilla.com"}),
+               ],
+    }
 
 ---------
-Scheduler
+Signature
 ---------
-A scheduler is basically a job template with a list of event subscriptions.
+Signatures are attached to many objects in LWR. A single signature is
+specified as an object.
+
+Version 0
+---------
+::
+
+    key     description
+    ---     -----------
+    v       version - set to the number 0
+    type    type of signature. supported formats for version 0 are:
+            "null" - no signature
+
+----
+Plan
+----
+A plan is basically a job template with a list of event subscriptions.
 The job template will be instantiated when a matching event is received by
 the planner. The event will be attached to the job and then sent to the
 `job queue`_.
 
-Schedulers are managed and triggered by the planner_.
-
-A scheduler can be specified thought of as a tuple of
-(``owner``, ``bucket``, ``event_type``, ``job_template``, ``data``).
-
-``event_type`` doesn't have to be in ``owner``'s bucket, as long as
-``owner`` has read access to ``event_type``'s bucket.
-
-``event_type`` is split on the
-period (``.``), and the first element is treated as the bucket. Everything
-after that is arbitrary.
+Plans are managed and triggered by the planner_. The following is mostly
+implementation details as plans are not normally interacted with by users
+or slave machines.
 
 Some examples:
 
-* A "jobset" scheduler subscribes to "<bucket>.build.finished", "<bucket>.build.trigger", "<bucket>.jobsets.new" events
-  and creates a job that determines if any new jobs in a jobset are
-  runnable.
+* A "jobset" plan subscribes to "<bucket>.build.finished",
+  "<bucket>.build.trigger", "<bucket>.jobsets.new" events and creates a job
+  that determines if any new jobs in a jobset are runnable.
 
-* A "mozilla" scheduler subscribes to hg push events and creates a full
+* A "mozilla" plan subscribes to hg push events and creates a full
   hierarchy of builds and tests (a `job set`_) with proper dependencies
   between them.
+
+Version 0
+---------
+::
+
+    key     description
+    ---     -----------
+    v       version - set to the number 0
+    owner   name of who owns this plan - also who will own any created
+            jobs
+    bucket  which bucket created jobs will go into
+    events  a list of "bucket.event_name" strings to indicate which events
+            this plan is subscribed to
+    job_template
+            trimmed down job document that is used to create new jobs in
+            response to events
+            the "command", "tags" and "interpreter" fields are required"
+    data    extra data to attach to the job
 
 -------
 Job Set
@@ -487,7 +630,7 @@ If D generates trigger t1, then F is run
 
 To submit a job set, each job in the set should be created first with
 state=waiting, and then the jobset can be created referencing all the job
-ids. Once the jobset is submitted the jobset scheduler will run and mark
+ids. Once the jobset is submitted the jobset planner will run and mark
 any jobs in the jobset as runnable.
 
 ---
@@ -499,7 +642,13 @@ A job is an object that has the following fields:
     a unique identifier for the job
 
 * ``command``
-    the command to run
+    the command to run. this will be a regular string processed by whatever
+    ``interpreter`` is selected below. It can be omitted if ``command_url``
+    is provided.
+
+* ``command_url``
+    url to a command to run. the file at the specified url will be
+    downloaded locally and then run by the specified ``interpreter``
 
 * ``tags``
     list of strings to tag the jobs with. some of these may be restricted
@@ -527,7 +676,23 @@ A job is an object that has the following fields:
 * ``required_slave_tags``
     what type of slave this job needs
 
+* ``interpreter``
+    how should the command be run (python, bash, etc.)
+
+* ``data``
+    data from planner
+
+* ``event``
+    which event triggered this job
+
+* ``planner_id``
+    which planner triggered this job
+
+* ``bucket``
+    what bucket this job is in
+
 * MOAR!
+
 
 Access control
 ==============
@@ -667,6 +832,54 @@ e.g.:
 
 - guarantee Y% to developer / community jobs.
 
+
+Protocols
+=========
+
+----
+HTTP
+----
+Authentication to HTTP interfaces is a deployment issue, and depends which
+clients are going to be accessing it. For user facing interfaces, HTTP
+Basic or Digest authentication or even BrowserID could work. For automated
+systems, HTTP Basic or Digest could be used, or a simpler token system.
+
+In any case, the web service will trust the ``REMOTE_USER`` variable in the
+environment for authentication.
+
+---
+ZMQ
+---
+
+All ZMQ messages use a common message header. The message begins with a
+single byte which represents the protocol version. The meaning of following
+bytes are defined by the version.
+
+Version 0
+---------
+::
+
+    byte(s) description
+    ------- -----------
+    0       b'\x00' - version code '0'
+    1       encoder id
+    2       compressor id
+    3-      message data
+
+    defined encoders:
+    0 - raw
+    1 - json
+    2 - msgpack
+
+    defined compressors
+    0 - raw
+    1 - zlib
+
+    implementations are required to support the raw and json encoders as
+    well as the raw compressor.
+
+    TODO: describe encoder/compressor negotiation
+
 TODO
 ====
 
@@ -675,11 +888,6 @@ TODO
   * who can run what type of jobs, and how often?
   * control over tags
   * resource allocation
-
-* Split up `job queue`_ into pieces that queue jobs, mark as runnable, etc.?
-
-  * marking jobs as runnable is handled by a scheduler that manages job
-    sets.
 
 * Integration with other tools, like tree status - when tree is closed,
   stop new jobs from getting scheduled. When infra fails, automatically
@@ -694,26 +902,14 @@ TODO
 * Log streaming. It would be nice to be stream log files to developers. I
   think zmq would be great for this.
 
-* MOAR buckets!
-
-  * planner could list schedulers by bucket. auth'ed users could change the
-    scheduling for their bucket
-
-  * events are per bucket
-
-  * files are per bucket
-
-* specify ZMQ message encoding
-
-* reaper
-  ttls
+* reaper, ttls for pending work
 
 * chaos monkey
 
 * timers (for generating events)
 
-* is merging in the scheduler the right thing to do?
-  a scheduler has the context and knowledge for what types of jobs are
+* is merging in the planner job the right thing to do?
+  a planner job has the context and knowledge for what types of jobs are
   mergable and not, and how many could be merged at once
 
   buildbot currently merges at the time when jobs are assigned to slaves
@@ -723,10 +919,12 @@ TODO
     * mozharness could dump out current step to well defined location
       (file)
 
+    * integrate vnc / console?
+      slave software should be able to record cpu, memory, running processes,
+      get a screenshot, free disk space
+
 * breakpoints for jobs? (supported by extra data sent in event, passed
   along to mozharness script?) job can pause itself? pause-after-run.
-
-* integrate vnc / console?
 
 * jobs that span slaves
 
