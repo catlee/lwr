@@ -670,7 +670,7 @@ A job is an object that has the following fields:
     ``paused``
         this job has been paused by a user
 
-* ``status``
+* ``results``
     a code indicating whether the job was successful, failed, etc.
 
 * ``required_slave_tags``
